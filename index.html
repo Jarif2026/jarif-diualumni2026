@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIU Alumni Portal | Premium Edition</title>
+
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ==========================================================================
+           1. SYSTEM VARIABLES & 7-COLOR ANIMATED BACKGROUND
+           ========================================================================== */
+        :root {
+            --c-navy-dark: #020617;
+            --c-navy-card: rgba(15, 23, 42, 0.85);
+            --c1-cyan: #06b6d4;
+            --c2-cobalt: #2563eb;
+            --c3-gold: #f59e0b;
+            --c4-emerald: #10b981;
+            --c5-violet: #a855f7;
+            --c6-rose: #f43f5e;
+            --c7-indigo: #6366f1;
+            
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-navy: rgba(56, 189, 248, 0.25);
+            --card-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.85);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --transition-smooth: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: linear-gradient(
+                270deg,
+                #020617,
+                #09132d,
+                #1e1b4b,
+                #064e3b,
+                #311042,
+                #451a03,
+                #4c0519,
+                #020617
+            );
+            background-size: 1600% 1600%;
+            animation: waveGradient 22s ease infinite;
+            color: var(--text-light);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        @keyframes waveGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .wave-layer {
+            position: fixed;
+            top: 0; left: 0; width: 200%; height: 100%;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, transparent 60%);
+            animation: waveFlow 14s linear infinite;
+            pointer-events: none; z-index: -1;
+        }
+
+        @keyframes waveFlow {
+            0% { transform: translateX(0) translateY(0); }
+            50% { transform: translateX(-25%) translateY(15px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+
+        #scrollProgress {
+            position: fixed; top: 0; left: 0; height: 4px;
+            background: linear-gradient(90deg, var(--c1-cyan), var(--c5-violet), var(--c3-gold));
+            width: 0%; z-index: 2000;
+        }
+
+        /* ==========================================================================
+           2. ALL SECTION BOXES CONTINUOUS FLOATING & INTERACTIVE BOUNCE ANIMATION
+           ========================================================================== */
+        
+        /* Floating movement keyframes for boxes */
+        @keyframes boxFloatOdd {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(0.4deg); }
+        }
+
+        @keyframes boxFloatEven {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(10px) rotate(-0.4deg); }
+        }
+
+        /* Apply continuous floating animation to ALL section containers & boxes */
+        .glass-card-main, 
+        .timer-box, 
+        .stat-card, 
+        .story-card, 
+        .verify-box, 
+        .startup-card, 
+        .faq-item, 
+        .dir-card, 
+        .contact-box-grid,
+        .dev-hero-card {
+            animation: boxFloatOdd 5s ease-in-out infinite;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+        }
+
+        /* Alternate rotation for even elements */
+        .stat-card:nth-child(even), 
+        .story-card:nth-child(even), 
+        .startup-card:nth-child(even), 
+        .dir-card:nth-child(even) {
+            animation: boxFloatEven 6s ease-in-out 1s infinite;
+        }
+
+        /* Hover & Active Bounce Effects on ALL Boxes */
+        .glass-card-main:hover, 
+        .timer-box:hover, 
+        .stat-card:hover, 
+        .story-card:hover, 
+        .verify-box:hover, 
+        .startup-card:hover, 
+        .faq-item:hover, 
+        .dir-card:hover, 
+        .contact-box-grid:hover,
+        .dev-hero-card:hover {
+            transform: translateY(-12px) scale(1.02) !important;
+            box-shadow: 0 20px 45px rgba(6, 182, 212, 0.4);
+            border-color: var(--c1-cyan) !important;
+        }
+
+        .glass-card-main:active, 
+        .timer-box:active, 
+        .stat-card:active, 
+        .story-card:active, 
+        .verify-box:active, 
+        .startup-card:active, 
+        .faq-item:active, 
+        .dir-card:active, 
+        .contact-box-grid:active,
+        .dev-hero-card:active {
+            transform: scale(0.95) translateY(5px) rotate(-1deg) !important;
+        }
+
+        /* Text Interactions */
+        h1, h2, h3, h4, h5, h6, p, span, a, button, .hero-badge {
+            transition: var(--transition-smooth);
+            cursor: pointer;
+        }
+
+        h1:hover, h2:hover, h3:hover, .section-tag:hover {
+            transform: translateY(-3px) scale(1.01);
+            text-shadow: 0 5px 15px rgba(6, 182, 212, 0.4);
+        }
+
+        h1:active, h2:active, h3:active, h4:active, p:active, span:active, a:active, button:active, .hero-badge:active {
+            transform: scale(0.95) translateY(3px) !important;
+        }
+
+        .cyan-text { background: linear-gradient(135deg, var(--c1-cyan), var(--c2-cobalt)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gold-text { background: linear-gradient(135deg, #fef08a, var(--c3-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* ==========================================================================
+           3. MOVING TICKER
+           ========================================================================== */
+        .ticker-wrap {
+            width: 100%; background: rgba(2, 6, 23, 0.92); color: var(--c1-cyan);
+            padding: 12px 0; overflow: hidden; white-space: nowrap;
+            border-bottom: 1px solid var(--border-navy); backdrop-filter: blur(10px);
+        }
+
+        .ticker-move { display: inline-block; animation: ticker 25s linear infinite; }
+        .ticker-item { display: inline-block; padding: 0 35px; font-size: 0.92rem; font-weight: 600; }
+        .ticker-item i { color: var(--c3-gold); margin-right: 8px; }
+
+        @keyframes ticker {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-50%, 0, 0); }
+        }
+
+        /* ==========================================================================
+           4. NAVBAR
+           ========================================================================== */
+        .main-header {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(2, 6, 23, 0.88); backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--border-navy);
+        }
+
+        .navbar {
+            max-width: 1280px; margin: 0 auto; padding: 18px 24px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .logo-box { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-icon {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, var(--c1-cyan), var(--c2-cobalt));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 1.4rem; box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+        }
+
+        .logo-text { font-family: 'Outfit', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--text-light); }
+        .logo-text span { color: var(--c1-cyan); }
+
+        .nav-links { display: flex; gap: 24px; list-style: none; }
+        .nav-links a {
+            text-decoration: none; color: var(--text-muted); font-weight: 600; font-size: 0.92rem;
+            position: relative; padding: 6px 0;
+        }
+
+        .nav-links a:hover, .nav-links a.active { color: var(--c1-cyan); }
+
+        /* ==========================================================================
+           5. HERO SECTION WITH DEVELOPER PHOTO
+           ========================================================================== */
+        .hero-section {
+            padding: 80px 24px 50px 24px; max-width: 1280px; margin: 0 auto;
+            display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px; padding: 8px 20px;
+            background: rgba(6, 182, 212, 0.12); border: 1px solid var(--border-navy);
+            border-radius: 50px; color: var(--c1-cyan); font-weight: 700; font-size: 0.85rem; margin-bottom: 24px;
+        }
+
+        .hero-title { font-family: 'Outfit', sans-serif; font-size: 3.6rem; font-weight: 800; line-height: 1.15; margin-bottom: 20px; }
+        .hero-desc { font-size: 1.1rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 35px; }
+
+        .btn-group { display: flex; gap: 18px; flex-wrap: wrap; }
+        .btn {
+            padding: 15px 32px; border-radius: 50px; font-weight: 800; font-size: 0.95rem;
+            text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+            cursor: pointer; border: none;
+        }
+
+        .btn-cyan { background: linear-gradient(135deg, var(--c1-cyan), var(--c2-cobalt)); color: white; box-shadow: 0 10px 25px rgba(6, 182, 212, 0.35); }
+        .btn-cyan:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(6, 182, 212, 0.55); }
+        .btn-outline { background: transparent; color: var(--text-light); border: 1px solid var(--border-navy); }
+        .btn-outline:hover { background: rgba(6, 182, 212, 0.12); color: var(--c1-cyan); transform: translateY(-3px); }
+
+        .glass-card-main {
+            background: var(--c-navy-card); backdrop-filter: blur(25px);
+            border: 1px solid var(--border-navy); border-radius: var(--radius-lg); padding: 35px; box-shadow: var(--card-shadow);
+        }
+
+        /* DEVELOPER HERO CARD WITH YOUR IMAGE */
+        .dev-hero-card {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(6, 182, 212, 0.15));
+            border: 1px solid var(--c3-gold); border-radius: 16px; padding: 18px 20px; margin-top: 25px;
+            display: flex; align-items: center; gap: 15px;
+        }
+
+        .dev-hero-img {
+            width: 65px; height: 65px; border-radius: 50%;
+            border: 2px solid var(--c3-gold); object-fit: cover;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+        }
+
+        /* ==========================================================================
+           6. COUNTDOWN TIMER SECTION
+           ========================================================================== */
+        .timer-box {
+            background: var(--c-navy-card); border: 1px solid var(--border-navy);
+            border-radius: var(--radius-lg); padding: 35px; text-align: center;
+            margin: 40px auto; max-width: 1280px; backdrop-filter: blur(20px);
+            box-shadow: var(--card-shadow);
+        }
+
+        .countdown-grid {
+            display: flex; justify-content: center; gap: 25px; margin-top: 20px; flex-wrap: wrap;
+        }
+
+        .count-item {
+            background: rgba(3, 7, 18, 0.7); border: 1px solid var(--border-navy);
+            padding: 18px 25px; border-radius: 16px; min-width: 100px;
+        }
+
+        .count-number {
+            font-size: 2.2rem; font-weight: 800; font-family: 'Outfit', sans-serif; color: var(--c1-cyan);
+        }
+
+        .count-label {
+            font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-top: 4px;
+        }
+
+        /* ==========================================================================
+           7. IMPACT STATS
+           ========================================================================== */
+        .section-container { max-width: 1280px; margin: 0 auto; padding: 60px 24px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .stat-card {
+            background: var(--c-navy-card); border: 1px solid var(--border-navy);
+            border-radius: var(--radius-md); padding: 25px; text-align: center;
+            backdrop-filter: blur(20px);
+        }
+        .stat-num { font-size: 2.2rem; font-weight: 800; font-family: 'Outfit', sans-serif; }
+
+        .section-title-wrap { text-align: center; margin-bottom: 50px; }
+        .section-tag { color: var(--c1-cyan); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; margin-bottom: 12px; display: block; }
+        .main-heading { font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; }
+
+        /* ==========================================================================
+           8. SUCCESS STORIES & PROFILE IMAGES
+           ========================================================================== */
+        .stories-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+        .story-card {
+            background: var(--c-navy-card); border-radius: var(--radius-lg); padding: 32px;
+            border: 1px solid var(--border-navy); backdrop-filter: blur(20px);
+            box-shadow: var(--card-shadow); display: flex; flex-direction: column; justify-content: space-between;
+        }
+
+        .story-card.jarif-special {
+            grid-column: span 3;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 27, 75, 0.95));
+            border: 2px solid var(--c3-gold); display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 35px; align-items: center;
+        }
+
+        .profile-avatar-box {
+            width: 100px; height: 100px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--c1-cyan), var(--c2-cobalt));
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 2rem; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(6, 182, 212, 0.35);
+            overflow: hidden; border: 3px solid var(--c3-gold);
+        }
+
+        .profile-avatar-img { width: 100%; height: 100%; object-fit: cover; }
+        .jarif-badge { background: var(--c3-gold); color: #000; font-weight: 800; padding: 6px 16px; border-radius: 50px; font-size: 0.8rem; display: inline-block; margin-bottom: 15px; text-transform: uppercase; }
+
+        /* ==========================================================================
+           9. DIGITAL CREDENTIAL VERIFICATION
+           ========================================================================== */
+        .verify-box {
+            background: var(--c-navy-card); border: 1px solid var(--border-navy);
+            border-radius: var(--radius-lg); padding: 40px; text-align: center; max-width: 800px; margin: 0 auto;
+            backdrop-filter: blur(20px); box-shadow: var(--card-shadow);
+        }
+        .verify-input-group { display: flex; gap: 12px; margin-top: 25px; justify-content: center; }
+        .verify-input {
+            padding: 15px 24px; border-radius: 50px; background: rgba(3, 7, 18, 0.8);
+            border: 1px solid var(--border-navy); color: white; font-size: 1rem; width: 60%; outline: none;
+        }
+        .verify-result { margin-top: 20px; padding: 15px; border-radius: 12px; display: none; font-weight: 700; }
+
+        /* ==========================================================================
+           10. STARTUPS
+           ========================================================================== */
+        .startup-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+        .startup-card {
+            background: var(--c-navy-card); border-radius: var(--radius-md); border: 1px solid var(--border-navy);
+            padding: 30px; backdrop-filter: blur(20px);
+        }
+
+        /* ==========================================================================
+           11. FAQ ACCORDION
+           ========================================================================== */
+        .faq-item {
+            background: var(--c-navy-card); border: 1px solid var(--border-navy);
+            border-radius: var(--radius-md); margin-bottom: 15px; overflow: hidden;
+        }
+        .faq-question {
+            padding: 20px 25px; font-weight: 700; font-size: 1.05rem; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center; color: var(--text-light);
+        }
+        .faq-answer { padding: 0 25px 20px 25px; color: var(--text-muted); display: none; line-height: 1.6; }
+
+        /* ==========================================================================
+           12. DIRECTORY WITH INTERACTIVE FILTER
+           ========================================================================== */
+        .filter-btn-group { display: flex; justify-content: center; gap: 12px; margin-bottom: 30px; }
+        .filter-btn {
+            padding: 8px 20px; border-radius: 50px; background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-navy); color: var(--text-muted); font-weight: 700;
+            font-size: 0.88rem; cursor: pointer; transition: var(--transition-smooth);
+        }
+        .filter-btn.active, .filter-btn:hover { background: var(--c1-cyan); color: white; border-color: var(--c1-cyan); }
+
+        .directory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; }
+        .dir-card {
+            background: var(--c-navy-card); border-radius: var(--radius-md); padding: 30px;
+            text-align: center; border: 1px solid var(--border-navy); backdrop-filter: blur(20px);
+        }
+
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(2, 6, 23, 0.88); backdrop-filter: blur(15px);
+            display: none; align-items: center; justify-content: center; z-index: 3000;
+        }
+        .modal-card {
+            background: var(--c-navy-card); border: 2px solid var(--c1-cyan);
+            border-radius: var(--radius-lg); padding: 35px; max-width: 500px; width: 90%; text-align: center;
+        }
+
+        /* FLOATING AI CHAT WIDGET */
+        .floating-chat {
+            position: fixed; bottom: 30px; right: 30px; z-index: 2000;
+            background: linear-gradient(135deg, var(--c1-cyan), var(--c2-cobalt));
+            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; color: white; font-size: 1.6rem; cursor: pointer;
+            box-shadow: 0 10px 25px rgba(6, 182, 212, 0.5); transition: var(--transition-smooth);
+        }
+        .floating-chat:hover { transform: scale(1.15) rotate(10deg); }
+
+        /* CONTACT FORM */
+        .contact-box-grid {
+            display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px;
+            background: var(--c-navy-card); border-radius: var(--radius-lg); padding: 40px;
+            border: 1px solid var(--border-navy); backdrop-filter: blur(20px);
+        }
+        .form-control {
+            width: 100%; padding: 15px 20px; border-radius: 12px;
+            background: rgba(3, 7, 18, 0.8); border: 1px solid var(--border-navy);
+            color: var(--text-light); font-size: 0.95rem; margin-bottom: 18px; outline: none;
+        }
+
+        @media (max-width: 992px) {
+            .hero-section { grid-template-columns: 1fr; text-align: center; }
+            .btn-group { justify-content: center; }
+            .stories-grid, .stats-grid, .startup-grid { grid-template-columns: 1fr; }
+            .story-card.jarif-special { grid-template-columns: 1fr; grid-column: span 1; }
+            .contact-box-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="scrollProgress"></div>
+    <div class="wave-layer"></div>
+
+    <!-- MOVING TICKER -->
+    <div class="ticker-wrap">
+        <div class="ticker-move">
+            <div class="ticker-item"><i class="fa-solid fa-bullhorn"></i> Welcome Daffodil International University Alumni Network!</div>
+            <div class="ticker-item"><i class="fa-solid fa-crown"></i> Chief Lead & Developer: <strong>Md. Jafrul Islam Jarif</strong> (CEO & Founder, Jarif's Classroom)</div>
+            <div class="ticker-item"><i class="fa-solid fa-award"></i> Featured Alumni: <strong>Nusrat Jahan</strong> & <strong>Jannatun Nayma</strong></div>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <header class="main-header">
+        <div class="navbar">
+            <a href="#home" class="logo-box">
+                <div class="logo-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div class="logo-text">DIU <span>Alumni</span></div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#stories">Stories</a></li>
+                <li><a href="#verify">Verify ID</a></li>
+                <li><a href="#startups">Startups</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#directory">Directory</a></li>
+                <li><a href="#contact">Register</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="hero-section">
+        <div>
+            <div class="hero-badge"><i class="fa-solid fa-shield-halved"></i> Official DIU Network Portal</div>
+            <h1 class="hero-title">Shaping Legacy, <br><span class="cyan-text">Empowering Leaders</span></h1>
+            <p class="hero-desc">
+                Connecting technology pioneers, visionaries, and software executives from Daffodil International University.
+            </p>
+            <div class="btn-group">
+                <a href="#contact" class="btn btn-cyan"><i class="fa-solid fa-user-plus"></i> Join Network</a>
+                <a href="#verify" class="btn btn-outline"><i class="fa-solid fa-certificate"></i> Verify Alumni</a>
+            </div>
+
+            <!-- DEVELOPER CREDENTIAL CARD WITH YOUR PHOTO (IMG_4525_2.jpg) -->
+            <div class="dev-hero-card">
+                <img src="IMG_4525_2.jpg" alt="Md. Jafrul Islam Jarif" class="dev-hero-img">
+                <div>
+                    <p style="font-size:0.8rem; color:var(--c3-gold); font-weight:800; text-transform:uppercase;">Architect & Chief Developer</p>
+                    <h4 style="font-size:1.05rem; color:white;">Md. Jafrul Islam Jarif</h4>
+                    <p style="font-size:0.85rem; color:var(--text-muted);">CEO & Founder at <strong>Jarif's Classroom</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <!-- REMOVED "HUB" -> NOW "Leadership & Vision Center" -->
+            <div class="glass-card-main">
+                <div style="display:flex; align-items:center; gap:18px; margin-bottom:20px;">
+                    <div class="logo-icon" style="width:55px; height:55px; font-size:1.8rem;"><i class="fa-solid fa-trophy"></i></div>
+                    <div>
+                        <h3 style="font-size:1.2rem;" class="gold-text">Leadership & Vision Center</h3>
+                        <p style="font-size:0.85rem; color:var(--text-muted);">DIU Honor Roll System</p>
+                    </div>
+                </div>
+                <p style="font-size:0.95rem; color:var(--text-muted); font-style:italic;">
+                    "Fostering continuous software innovation, corporate placement, and engineering leadership worldwide."
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- COUNTDOWN TIMER SECTION -->
+    <div class="timer-box">
+        <span class="section-tag"><i class="fa-solid fa-calendar-check"></i> Upcoming Grand Event</span>
+        <h2 style="font-size:1.8rem; font-weight:800; margin-top:5px;">DIU Grand Alumni Reunion 2026</h2>
+        <div class="countdown-grid">
+            <div class="count-item">
+                <div class="count-number" id="cd-days">120</div>
+                <div class="count-label">Days</div>
+            </div>
+            <div class="count-item">
+                <div class="count-number" id="cd-hours">18</div>
+                <div class="count-label">Hours</div>
+            </div>
+            <div class="count-item">
+                <div class="count-number" id="cd-mins">45</div>
+                <div class="count-label">Minutes</div>
+            </div>
+            <div class="count-item">
+                <div class="count-number" id="cd-secs">30</div>
+                <div class="count-label">Seconds</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIVE STATS (REMOVED "HUB" -> "Mentorship Centers") -->
+    <div class="section-container" style="padding-top:0; padding-bottom:40px;">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-num cyan-text">30,000+</div>
+                <p style="color:var(--text-muted); font-size:0.9rem; margin-top:5px;">Global Graduates</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num gold-text">$10M+</div>
+                <p style="color:var(--text-muted); font-size:0.9rem; margin-top:5px;">Startup Funding</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" style="color:var(--c4-emerald);">90+</div>
+                <p style="color:var(--text-muted); font-size:0.9rem; margin-top:5px;">Global Chapters</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" style="color:var(--c5-violet);">150+</div>
+                <p style="color:var(--text-muted); font-size:0.9rem; margin-top:5px;">Mentorship Centers</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUCCESS STORIES WITH YOUR PHOTO -->
+    <section id="stories" class="section-container">
+        <div class="section-title-wrap">
+            <span class="section-tag">Hall of Fame</span>
+            <h2 class="main-heading">Featured Success Stories</h2>
+        </div>
+
+        <div class="stories-grid">
+            <!-- SPECIAL FEATURED CARD: JAFRUL ISLAM JARIF -->
+            <div class="story-card jarif-special">
+                <div style="text-align:center;">
+                    <div class="profile-avatar-box" style="margin: 0 auto 15px auto;">
+                        <img src="IMG_4525_2.jpg" alt="Md. Jafrul Islam Jarif" class="profile-avatar-img">
+                    </div>
+                    <span class="jarif-badge"><i class="fa-solid fa-crown"></i> CEO & FOUNDER</span>
+                    <h3 style="font-size:1.6rem; color:var(--text-light);">Md. Jafrul Islam Jarif</h3>
+                    <p style="color:var(--c3-gold); font-weight:700; font-size:0.9rem; margin-top:4px;">Dept. of CIS | Lead Architect</p>
+                </div>
+                <div>
+                    <h3 style="font-size:1.8rem; margin-bottom:12px;" class="gold-text">Founder at Jarif's Classroom</h3>
+                    <p style="color:#cbd5e1; font-size:1.05rem; line-height:1.7; font-style:italic;">
+                        "At <strong>Jarif's Classroom</strong>, we empower students with hands-on software development, real-world application building, and tech career strategy."
+                    </p>
+                    <button class="btn btn-cyan" style="margin-top:20px; padding:10px 24px; font-size:0.85rem;" onclick="openConnectModal('Md. Jafrul Islam Jarif')"><i class="fa-solid fa-paper-plane"></i> Connect Mentor</button>
+                </div>
+            </div>
+
+            <!-- NUSRAT JAHAN -->
+            <div class="story-card">
+                <div>
+                    <div class="profile-avatar-box" style="border-color:var(--c1-cyan);"><i class="fa-solid fa-user-astronaut"></i></div>
+                    <span class="section-tag">Class of 2022</span>
+                    <h3 style="font-size:1.4rem; margin-bottom:5px;">Nusrat Jahan</h3>
+                    <p style="color:var(--c1-cyan); font-weight:700; font-size:0.95rem; margin-bottom:15px;">Senior Product Manager at TechGlobal</p>
+                    <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.6; font-style:italic;">
+                        "DIU's project management modules provided the perfect stepping stone for my corporate journey."
+                    </p>
+                </div>
+                <button class="btn btn-outline" style="margin-top:20px; padding:10px 20px; font-size:0.85rem;" onclick="openConnectModal('Nusrat Jahan')">Connect</button>
+            </div>
+
+            <!-- JANNATUN NAYMA -->
+            <div class="story-card">
+                <div>
+                    <div class="profile-avatar-box" style="border-color:var(--c5-violet); background:linear-gradient(135deg, var(--c5-violet), var(--c2-cobalt));"><i class="fa-solid fa-laptop-code"></i></div>
+                    <span class="section-tag">Class of 2023</span>
+                    <h3 style="font-size:1.4rem; margin-bottom:5px;">Jannatun Nayma</h3>
+                    <p style="color:var(--c5-violet); font-weight:700; font-size:0.95rem; margin-bottom:15px;">Lead UI/UX Architect at DesignLabs</p>
+                    <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.6; font-style:italic;">
+                        "Design-thinking workshops at DIU gave me the creative foundation to build global software interfaces."
+                    </p>
+                </div>
+                <button class="btn btn-outline" style="margin-top:20px; padding:10px 20px; font-size:0.85rem;" onclick="openConnectModal('Jannatun Nayma')">Connect</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- DIGITAL CREDENTIAL VERIFICATION PORTAL -->
+    <section id="verify" class="section-container">
+        <div class="verify-box">
+            <span class="section-tag"><i class="fa-solid fa-shield-check"></i> Security Portal</span>
+            <h2 class="main-heading" style="margin-top:5px;">Digital Credential Verification</h2>
+            <p style="color:var(--text-muted); margin-top:10px;">Type any DIU Student ID (e.g. 253-16-123) to verify official alumni status.</p>
+            
+            <div class="verify-input-group">
+                <input type="text" id="verifyInput" class="verify-input" placeholder="Enter Student ID (e.g. 253-16-123)">
+                <button class="btn btn-cyan" onclick="checkVerification()"><i class="fa-solid fa-magnifying-glass"></i> Verify Now</button>
+            </div>
+            <div id="verifyResult" class="verify-result"></div>
+        </div>
+    </section>
+
+    <!-- STARTUP WALL -->
+    <section id="startups" class="section-container">
+        <div class="section-title-wrap">
+            <span class="section-tag">Innovation</span>
+            <h2 class="main-heading">Alumni Startup Wall</h2>
+        </div>
+        <div class="startup-grid">
+            <div class="startup-card">
+                <div class="logo-icon" style="margin-bottom:15px; background:linear-gradient(135deg, var(--c3-gold), #b45309);"><i class="fa-solid fa-chalkboard-user"></i></div>
+                <h3 style="font-size:1.3rem; margin-bottom:8px;">Jarif's Classroom</h3>
+                <p style="color:var(--c3-gold); font-weight:700; font-size:0.85rem; margin-bottom:12px;">Founder: Md. Jafrul Islam Jarif</p>
+                <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.6;">EdTech platform empowering engineering students with hands-on software development and career coaching.</p>
+            </div>
+
+            <div class="startup-card">
+                <div class="logo-icon" style="margin-bottom:15px; background:linear-gradient(135deg, var(--c1-cyan), var(--c2-cobalt));"><i class="fa-solid fa-cubes"></i></div>
+                <h3 style="font-size:1.3rem; margin-bottom:8px;">DesignLabs Global</h3>
+                <p style="color:var(--c1-cyan); font-weight:700; font-size:0.85rem; margin-bottom:12px;">Lead: Jannatun Nayma</p>
+                <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.6;">Design studio crafting brand identities, mobile applications, and enterprise UI/UX design systems.</p>
+            </div>
+
+            <div class="startup-card">
+                <div class="logo-icon" style="margin-bottom:15px; background:linear-gradient(135deg, var(--c5-violet), var(--c6-rose));"><i class="fa-solid fa-cloud-bolt"></i></div>
+                <h3 style="font-size:1.3rem; margin-bottom:8px;">TechGlobal Operations</h3>
+                <p style="color:var(--c5-violet); font-weight:700; font-size:0.85rem; margin-bottom:12px;">Lead: Nusrat Jahan</p>
+                <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.6;">Software consulting & product management agency driving digital transformation across enterprise clients.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ ACCORDION -->
+    <section id="faq" class="section-container">
+        <div class="section-title-wrap">
+            <span class="section-tag">Help Center</span>
+            <h2 class="main-heading">Frequently Asked Questions</h2>
+        </div>
+        <div style="max-width:800px; margin:0 auto;">
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>How do I register for the DIU Alumni Network?</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Fill out the registration form at the bottom of this page with your student ID and current organization details. Our verification team will process it within 24 hours.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>What is Jarif's Classroom mentorship program?</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Founded by Md. Jafrul Islam Jarif, Jarif's Classroom offers specialized guidance in web software engineering, coding best practices, and tech career planning.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Is alumni membership free of cost?</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Yes! Alumni membership, directory access, and standard networking events are completely free for all verified graduates of Daffodil International University.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DIRECTORY WITH DYNAMIC FILTER -->
+    <section id="directory" class="section-container">
+        <div class="section-title-wrap">
+            <span class="section-tag">Network</span>
+            <h2 class="main-heading">Alumni Directory</h2>
+        </div>
+
+        <div class="filter-btn-group">
+            <button class="filter-btn active" onclick="filterDirectory('all')">All Departments</button>
+            <button class="filter-btn" onclick="filterDirectory('cis')">Dept. of CIS</button>
+            <button class="filter-btn" onclick="filterDirectory('cse')">Dept. of CSE</button>
+            <button class="filter-btn" onclick="filterDirectory('se')">Dept. of SE</button>
+        </div>
+
+        <div class="directory-grid">
+            <!-- JARIF CARD (CIS) WITH PHOTO -->
+            <div class="dir-card" data-dept="cis">
+                <div class="profile-avatar-box" style="margin:0 auto 15px auto; width:70px; height:70px;">
+                    <img src="IMG_4525_2.jpg" alt="Md. Jafrul Islam Jarif" class="profile-avatar-img">
+                </div>
+                <h3 style="font-size:1.2rem; font-weight:800;">Md. Jafrul Islam Jarif</h3>
+                <span style="color:var(--c3-gold); font-weight:700; font-size:0.85rem;">CEO & Founder</span>
+                <p style="color:var(--text-muted); font-size:0.88rem; margin-top:4px;">Jarif's Classroom (CIS)</p>
+                <button class="btn btn-outline" style="margin-top:15px; padding:8px 18px; font-size:0.8rem; width:100%; justify-content:center;" onclick="openConnectModal('Md. Jafrul Islam Jarif')">View & Connect</button>
+            </div>
+
+            <!-- NUSRAT CARD (CSE) -->
+            <div class="dir-card" data-dept="cse">
+                <div class="logo-icon" style="margin:0 auto 15px auto;"><i class="fa-solid fa-user-astronaut"></i></div>
+                <h3 style="font-size:1.2rem; font-weight:800;">Nusrat Jahan</h3>
+                <span style="color:var(--c1-cyan); font-weight:700; font-size:0.85rem;">Senior Product Manager</span>
+                <p style="color:var(--text-muted); font-size:0.88rem; margin-top:4px;">TechGlobal (CSE)</p>
+                <button class="btn btn-outline" style="margin-top:15px; padding:8px 18px; font-size:0.8rem; width:100%; justify-content:center;" onclick="openConnectModal('Nusrat Jahan')">View & Connect</button>
+            </div>
+
+            <!-- JANNATUN NAYMA CARD (SE) -->
+            <div class="dir-card" data-dept="se">
+                <div class="logo-icon" style="margin:0 auto 15px auto;"><i class="fa-solid fa-code"></i></div>
+                <h3 style="font-size:1.2rem; font-weight:800;">Jannatun Nayma</h3>
+                <span style="color:var(--c5-violet); font-weight:700; font-size:0.85rem;">UI/UX Architect</span>
+                <p style="color:var(--text-muted); font-size:0.88rem; margin-top:4px;">DesignLabs (SE)</p>
+                <button class="btn btn-outline" style="margin-top:15px; padding:8px 18px; font-size:0.8rem; width:100%; justify-content:center;" onclick="openConnectModal('Jannatun Nayma')">View & Connect</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT FORM -->
+    <section id="contact" class="section-container">
+        <div class="contact-box-grid">
+            <div>
+                <span class="section-tag">Registration</span>
+                <h2 style="font-size:2rem; font-weight:800; margin-bottom:15px;">Join DIU Network</h2>
+                <p style="color:var(--text-muted); margin-bottom:25px;">Become a verified alumni member to access exclusive portal benefits.</p>
+                <div style="display:flex; flex-direction:column; gap:12px; color:var(--text-muted);">
+                    <p><i class="fa-solid fa-location-dot" style="color:var(--c1-cyan); margin-right:10px;"></i> Daffodil Smart City, Ashulia, Dhaka</p>
+                    <p><i class="fa-solid fa-envelope" style="color:var(--c1-cyan); margin-right:10px;"></i> alumni@daffodilvarsity.edu.bd</p>
+                </div>
+            </div>
+
+            <form id="registerForm">
+                <input type="text" class="form-control" placeholder="Full Name" required>
+                <input type="email" class="form-control" placeholder="Email Address" required>
+                <input type="text" class="form-control" placeholder="Student ID (e.g. 253-16-123)" required>
+                <button type="submit" class="btn btn-cyan" style="width:100%; justify-content:center;"><i class="fa-solid fa-paper-plane"></i> Submit Registration</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER WITH DEVELOPER CREDITS -->
+    <footer style="text-align:center; padding:40px 24px; background:#020617; border-top: 1px solid var(--border-navy);">
+        <div style="max-width:1280px; margin:0 auto;">
+            <p style="font-size:1.1rem; color:var(--text-light); margin-bottom:10px;">
+                Designed & Developed with ❤️ by <strong class="gold-text">Md. Jafrul Islam Jarif</strong>
+            </p>
+            <p style="color:var(--c1-cyan); font-weight:700; font-size:0.95rem; margin-bottom:15px;">
+                CEO & Founder — <strong>Jarif's Classroom</strong>
+            </p>
+            <p style="color:var(--text-muted); font-size:0.85rem;">
+                &copy; Daffodil International University Alumni Portal. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- FLOATING AI CHAT WIDGET -->
+    <div class="floating-chat" onclick="alert('🤖 Hello! I am DIU Alumni Assistant. How can I help you today?')">
+        <i class="fa-solid fa-robot"></i>
+    </div>
+
+    <!-- CONNECT MODAL -->
+    <div class="modal-overlay" id="connectModal">
+        <div class="modal-card">
+            <div class="logo-icon" style="margin: 0 auto 15px auto;"><i class="fa-solid fa-paper-plane"></i></div>
+            <h3 id="modalName" style="font-size:1.4rem; margin-bottom:10px;" class="cyan-text">Connect Request</h3>
+            <textarea class="form-control" rows="3" placeholder="Write your networking message..." style="resize:none;"></textarea>
+            <div style="display:flex; gap:12px;">
+                <button class="btn btn-cyan" style="flex:1; justify-content:center;" onclick="closeConnectModal(true)">Send</button>
+                <button class="btn btn-outline" style="flex:1; justify-content:center;" onclick="closeConnectModal(false)">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Scroll Progress Bar
+        window.onscroll = function() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("scrollProgress").style.width = scrolled + "%";
+        };
+
+        // Live Countdown Clock Logic
+        setInterval(() => {
+            let secs = document.getElementById('cd-secs');
+            let mins = document.getElementById('cd-mins');
+            if(secs) {
+                let currentSec = parseInt(secs.innerText);
+                if(currentSec > 0) {
+                    secs.innerText = currentSec - 1;
+                } else {
+                    secs.innerText = 59;
+                    if(mins) mins.innerText = Math.max(0, parseInt(mins.innerText) - 1);
+                }
+            }
+        }, 1000);
+
+        // Directory Filter Logic
+        function filterDirectory(dept) {
+            const cards = document.querySelectorAll('.dir-card');
+            const btns = document.querySelectorAll('.filter-btn');
+            
+            btns.forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            cards.forEach(card => {
+                if(dept === 'all' || card.getAttribute('data-dept') === dept) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Credential Verification Logic
+        function checkVerification() {
+            const val = document.getElementById('verifyInput').value.trim();
+            const res = document.getElementById('verifyResult');
+            res.style.display = 'block';
+
+            if(val !== '') {
+                res.style.background = 'rgba(16, 185, 129, 0.2)';
+                res.style.border = '1px solid #10b981';
+                res.style.color = '#34d399';
+                res.innerHTML = '<i class="fa-solid fa-circle-check"></i> VERIFIED ALUMNI: ' + val + ' (Official DIU Honors Record Found)';
+            } else {
+                res.style.background = 'rgba(244, 63, 94, 0.2)';
+                res.style.border = '1px solid #f43f5e';
+                res.style.color = '#f87171';
+                res.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Please enter a valid Student ID!';
+            }
+        }
+
+        // FAQ Toggle Logic
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const isVisible = answer.style.display === 'block';
+            answer.style.display = isVisible ? 'none' : 'block';
+        }
+
+        // Connect Modal Logic
+        const modal = document.getElementById('connectModal');
+        const modalName = document.getElementById('modalName');
+
+        function openConnectModal(name) {
+            modalName.innerText = "Connect with " + name;
+            modal.style.display = "flex";
+        }
+
+        function closeConnectModal(isSent) {
+            if(isSent) alert('✨ Connection request sent successfully!');
+            modal.style.display = "none";
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('🎉 Registration request submitted successfully!');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
